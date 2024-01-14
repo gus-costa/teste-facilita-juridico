@@ -4,11 +4,13 @@ import 'bootstrap/dist/css/bootstrap.min.css'; // Importar os estilos do Bootstr
 import './App.css';
 import CadastroCliente from './components/CadastroCliente';
 import ClienteRow from './components/ClienteRow';
+import RotaOtimizada from './components/RotaOtimizada';
 
 function App() {
     const [clientes, setClientes] = useState([]);
     const [filtro, setFiltro] = useState({ campo: 'nome', valor: '' });
     const [exibirCadastro, setExibirCadastro] = useState(false);
+    const [exibirRota, setExibirRota] = useState(false);
     const filtroRef = useRef();
 
     useEffect(() => {
@@ -32,6 +34,7 @@ function App() {
                 <h1>Clientes</h1>
                 <button className="btn btn-primary" onClick={() => setExibirCadastro(true)}>+ Cliente</button>
             </div>
+            <CadastroCliente exibir={exibirCadastro} onFechar={() => setExibirCadastro(false)} />
             <div className="row justify-content-end mb-3">
                 <div className="col-lg-4">
                     <div className="input-group">
@@ -56,7 +59,10 @@ function App() {
                     Nenhum cliente para listar.
                 </div>
             )}
-            <CadastroCliente exibir={exibirCadastro} onFechar={() => setExibirCadastro(false)} />
+            <h2 className="mt-4">Calcular Rota Otimizada</h2>
+            <p>Clique no botão abaixo para calcular a rota otimizada entre os clientes.</p>
+            <button className="btn btn-primary" onClick={() => setExibirRota(true)}>Calcular</button>
+            <RotaOtimizada exibir={exibirRota} onFechar={() => setExibirRota(false)} />
         </div>
     );
 }
