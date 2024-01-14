@@ -42,9 +42,9 @@ const filtrarClientes = async (req, res) => {
 
 // Cadastrar cliente
 const cadastrarCliente = async (req, res) => {
-    const { nome, email, telefone } = req.body;
+    const { nome, email, telefone, coordenada_x, coordenada_y } = req.body;
     try {
-        await db.query('INSERT INTO clientes (nome, email, telefone) VALUES ($1, $2, $3)', [nome, email, telefone]);
+        await db.query('INSERT INTO clientes (nome, email, telefone, coordenada_x, coordenada_y) VALUES ($1, $2, $3, $4, $5)', [nome, email, telefone, coordenada_x, coordenada_y]);
         res.status(201).json({ message: 'Cliente cadastrado com sucesso' });
     } catch (error) {
         console.error(error);
