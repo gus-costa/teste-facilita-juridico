@@ -37,7 +37,7 @@ function App() {
     }
 
     return (
-        <div className="container mt-4">
+        <div className="container mt-4 mb-5">
             <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center mb-4">
                 <h1>Clientes</h1>
                 <button className="btn btn-primary" onClick={() => setExibirCadastro(true)}>+ Cliente</button>
