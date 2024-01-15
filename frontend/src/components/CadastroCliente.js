@@ -19,10 +19,13 @@ export default function CadastroCliente({ exibir, onFechar }) {
                 setNovoCliente({ nome: '', email: '', telefone: '', coordenada_x: 0, coordenada_y: 0 });
                 onFechar(true);
             })
-            .catch(error => console.error(error));
+            .catch(error => {
+                alert(error.response.data.error);
+                console.error(error);
+            });
     };
 
-    const isFormValido = () => Object.keys(erros).length > 0;
+    const isFormValido = () => Object.keys(erros).length === 0;
 
     const validarForm = (campo, valor) => {
         const removerPropriedade = (obj, prop) => {
@@ -100,7 +103,7 @@ export default function CadastroCliente({ exibir, onFechar }) {
                 <Button variant="secondary" onClick={onFechar}>
                     Cancelar
                 </Button>
-                <Button variant="primary" onClick={cadastrarCliente} disabled={isFormValido()}>
+                <Button variant="primary" onClick={cadastrarCliente} disabled={!isFormValido()}>
                     Cadastrar
                 </Button>
             </Modal.Footer>
