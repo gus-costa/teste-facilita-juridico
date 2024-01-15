@@ -12,7 +12,7 @@ export default function CadastroCliente({ exibir, onFechar }) {
             .then(response => {
                 alert(response.data.message);
                 setNovoCliente({ nome: '', email: '', telefone: '', coordenada_x: 0, coordenada_y: 0 });
-                onFechar();
+                onFechar(true);
             })
             .catch(error => console.error(error));
     };

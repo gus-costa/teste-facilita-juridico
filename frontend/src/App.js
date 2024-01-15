@@ -11,6 +11,7 @@ function App() {
     const [filtro, setFiltro] = useState({ campo: 'nome', valor: '' });
     const [exibirCadastro, setExibirCadastro] = useState(false);
     const [exibirRota, setExibirRota] = useState(false);
+    const [carregandoRegistros, setCarregandoRegistros] = useState(false);
     const filtroRef = useRef();
 
     useEffect(() => {
@@ -19,14 +20,21 @@ function App() {
 
     const listarClientes = useCallback(() => {
         const filtro = filtroRef.current;
+        setCarregandoRegistros(true);
         axios.get(`${process.env.REACT_APP_API_BASE_URL}/clientes${filtro.valor ? `?${filtro.campo}=${filtro.valor}` : ''}`)
             .then(response => setClientes(response.data))
-            .catch(error => console.error(error));
+            .catch(error => console.error(error))
+            .finally(() => setCarregandoRegistros(false));
     }, [filtroRef]);
 
     useEffect(() => {
         listarClientes()
     }, [listarClientes]);
+
+    const handleFecharCadastro = (atualizar = false) => {
+        if (atualizar) listarClientes();
+        setExibirCadastro(false);
+    }
 
     return (
         <div className="container mt-4">
@@ -34,7 +42,7 @@ function App() {
                 <h1>Clientes</h1>
                 <button className="btn btn-primary" onClick={() => setExibirCadastro(true)}>+ Cliente</button>
             </div>
-            <CadastroCliente exibir={exibirCadastro} onFechar={() => setExibirCadastro(false)} />
+            <CadastroCliente exibir={exibirCadastro} onFechar={handleFecharCadastro} />
             <div className="row justify-content-end mb-3">
                 <div className="col-lg-4">
                     <div className="input-group">
@@ -48,7 +56,11 @@ function App() {
                     </div>
                 </div>
             </div>
-            {clientes.length > 0 ? (
+            {carregandoRegistros ? (
+                <div className="text-center h4 my-5">
+                    Aguarde...
+                </div>
+            ) : clientes.length > 0 ? (
                 <ul className="list-group">
                     {clientes.map(cliente => (
                         <ClienteRow key={cliente.id} cliente={cliente} />
