@@ -13,10 +13,13 @@ export default function CadastroCliente({ exibir, onFechar }) {
         if (!isFormValido()) return;
         const objEnviar = {...novoCliente};
         objEnviar.telefone = objEnviar.telefone.replace(/[^0-9]/g, '');
-        axios.post(`${process.env.REACT_APP_API_BASE_URL}/clientes`, novoCliente)
+        objEnviar.coordenada_x = objEnviar.coordenada_x === '' ? null : objEnviar.coordenada_x;
+        objEnviar.coordenada_y = objEnviar.coordenada_y === '' ? null : objEnviar.coordenada_y;
+
+        axios.post(`${process.env.REACT_APP_API_BASE_URL}/clientes`, objEnviar)
             .then(response => {
                 alert(response.data.message);
-                setNovoCliente({ nome: '', email: '', telefone: '', coordenada_x: 0, coordenada_y: 0 });
+                setNovoCliente({ nome: '', email: '', telefone: '', coordenada_x: '', coordenada_y: '' });
                 onFechar(true);
             })
             .catch(error => {
