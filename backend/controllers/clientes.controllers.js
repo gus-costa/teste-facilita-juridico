@@ -43,6 +43,16 @@ const filtrarClientes = async (req, res) => {
 // Cadastrar cliente
 const cadastrarCliente = async (req, res) => {
     const { nome, email, telefone, coordenada_x, coordenada_y } = req.body;
+    
+    let mensagem = null;
+    if (!nome || nome.length < 3) mensagem = 'O nome é inválido';
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) mensagem = 'O email é inválido';
+    else if (!([10, 11].includes(telefone.replace(/[^0-9]/g, '').length))) mensagem = 'O telefone é inválido';
+    else if (!!coordenada_x && (isNaN(parseFloat(coordenada_x)) || !isFinite(coordenada_x))) mensagem = 'Coordenada X é inválida';
+    else if (!!coordenada_y && (isNaN(parseFloat(coordenada_y)) || !isFinite(coordenada_y))) mensagem = 'Coordenada Y é inválida';
+
+    if (mensagem !== null) return res.status(400).json({ error: mensagem });
+
     try {
         await db.query('INSERT INTO clientes (nome, email, telefone, coordenada_x, coordenada_y) VALUES ($1, $2, $3, $4, $5)', [nome, email, telefone, coordenada_x, coordenada_y]);
         res.status(201).json({ message: 'Cliente cadastrado com sucesso' });
